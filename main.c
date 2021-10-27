@@ -184,28 +184,6 @@ bool second_rule_check(char *str, int level) {
     return !has_wrong_rules;
 }
 
-//bool third_rule_check(char *str, int level) {
-//    bool has_repeats = false;
-//
-//    for (int i = 0; i < str_length(str); i++) {
-//        char c = str[i];
-//        if (char_code(c) > MIN_SYSTEM_SYMBOL_CODE && char_code(c) < MAX_SYSTEM_SYMBOL_CODE) continue;
-//
-//        char kernel[level];
-//        substring(str, kernel, i, level);
-//
-//        if (has_system_symbols(kernel)) continue;
-//        if (i + level > str_length_only_chars(str)) continue;
-//
-//        if (str_no_diff(kernel)) {
-//            has_repeats = true;
-//            break;
-//        }
-//    }
-//
-//    return !has_repeats;
-//}
-
 bool third_rule_check(char *str, int level) {
     bool has_repeats = false;
 
