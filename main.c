@@ -281,28 +281,25 @@ bool third_rule_check(char *str, int level) {
 
     if (!first_rule_succeeded || !second_rule_succeeded) return false;
 
-    bool has_repeats = false;
+    bool has_repeating_symbols = false;
 
-    int substrings_count = str_substrings_count(str, level);
+    for (int i = level; i <= str_length_only_chars(str); i++) {
+        int substrings_count = str_substrings_count(str, i);
 
-    for (int i = 0; i < substrings_count; i++) {
         for (int j = 0; j < substrings_count; j++) {
-            if (i < j) {
-                char substring_a[level], substring_b[level];
-                substring(str, substring_a, i, level);
-                substring(str, substring_b, j, level);
+            char substr[i];
+            substring(str, substr, j, i);
 
-                if (is_equal(substring_a, substring_b)) {
-                    has_repeats = true;
-                    break;
-                }
+            if (str_no_diff(substr)) {
+                has_repeating_symbols = true;
+                break;
             }
         }
 
-        if (has_repeats) break;
+        if (has_repeating_symbols) break;
     }
 
-    return !has_repeats;
+    return !has_repeating_symbols;
 }
 
 /**
