@@ -74,6 +74,10 @@ char *substring(const char *str, char *substring, int start, int length) {
     substring[c] = '\0';
 }
 
+int str_substrings_count(char *str, int kernel_size) {
+    return (int) str_length_only_chars(str) - kernel_size + 1;
+}
+
 char *str_copy(char *dest, const char *src) {
     char *ptr = dest;
 
@@ -92,12 +96,8 @@ bool is_equal(const char *a, const char *b) {
     bool is_equal = true;
     int i = 0;
 
-    printf("[IS_EQUAL]: %s - %s\n", a, b);
-
     while (a[i] != '\0' || b[i] != '\0') {
-        printf("[IS_EQUAL]: %c = %c\n", a[i], b[i]);
         if (a[i] != b[i]) {
-            printf("[IS_EQUAL]: Not equal\n");
             is_equal = false;
             break;
         }
@@ -184,23 +184,48 @@ bool second_rule_check(char *str, int level) {
     return !has_wrong_rules;
 }
 
+//bool third_rule_check(char *str, int level) {
+//    bool has_repeats = false;
+//
+//    for (int i = 0; i < str_length(str); i++) {
+//        char c = str[i];
+//        if (char_code(c) > MIN_SYSTEM_SYMBOL_CODE && char_code(c) < MAX_SYSTEM_SYMBOL_CODE) continue;
+//
+//        char kernel[level];
+//        substring(str, kernel, i, level);
+//
+//        if (has_system_symbols(kernel)) continue;
+//        if (i + level > str_length_only_chars(str)) continue;
+//
+//        if (str_no_diff(kernel)) {
+//            has_repeats = true;
+//            break;
+//        }
+//    }
+//
+//    return !has_repeats;
+//}
+
 bool third_rule_check(char *str, int level) {
     bool has_repeats = false;
 
-    for (int i = 0; i < str_length(str); i++) {
-        char c = str[i];
-        if (char_code(c) > MIN_SYSTEM_SYMBOL_CODE && char_code(c) < MAX_SYSTEM_SYMBOL_CODE) continue;
+    int substrings_count = str_substrings_count(str, level);
 
-        char kernel[level];
-        substring(str, kernel, i, level);
+    for (int i = 0; i < substrings_count; i++) {
+        for (int j = 0; j < substrings_count; j++) {
+            if (i < j) {
+                char substring_a[level], substring_b[level];
+                substring(str, substring_a, i, level);
+                substring(str, substring_b, j, level);
 
-        if (has_system_symbols(kernel)) continue;
-        if (i + level > str_length_only_chars(str)) continue;
-
-        if (str_no_diff(kernel)) {
-            has_repeats = true;
-            break;
+                if (is_equal(substring_a, substring_b)) {
+                    has_repeats = true;
+                    break;
+                }
+            }
         }
+
+        if (has_repeats) break;
     }
 
     return !has_repeats;
@@ -265,8 +290,6 @@ int main(int argc, char *argv[]) {
     double passwords_chars_count = 0;
 
     while (fgets(input_passwords, 100, stdin)) {
-        third_rule_check(input_passwords, 2);
-        printf("\n");
 
 //        WORKS!
 //        if (third_rule_check(input_passwords, 2))
