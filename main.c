@@ -20,6 +20,8 @@ typedef unsigned short bool;
 
 typedef bool(*func_ptr)(char);
 
+typedef bool(*rule_func_ptr)(char *, int);
+
 typedef struct {
     int n_chars;
     int min;
@@ -267,18 +269,12 @@ int main(int argc, char *argv[]) {
     double passwords_count = 0;
     double passwords_chars_count = 0;
 
-    while (fgets(input_passwords, 100, stdin)) {
-//        WORKS!
-//        if (fourth_rule_check(input_passwords, 2))
-//            printf("%s - %s\n", input_passwords, "fourth rule success");
-//        else
-//            printf("%s - %s\n", input_passwords, "fourth rule error");
+    rule_func_ptr check_functions[4] = {&first_rule_check, &second_rule_check, &third_rule_check, &fourth_rule_check};
 
-//        WORKS!
-//        if (third_rule_check(input_passwords, 2))
-//            printf("%s - %s\n", input_passwords, "third rule success");
-//        else
-//            printf("%s - %s\n", input_passwords, "third rule error");
+    while (fgets(input_passwords, 100, stdin)) {
+        if (check_functions[level - 1](input_passwords, param))
+            printf("%s\n", input_passwords);
+
 
         update_chars_table(chars_table, input_passwords);
 
