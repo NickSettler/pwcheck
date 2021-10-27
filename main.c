@@ -349,7 +349,7 @@ bool fourth_rule_check(char *str, int level) {
 
 /**
  * Counts number of symbols valued as 1 from ASCII table
- * @param table ASCII characters tbale
+ * @param table ASCII characters table
  * @return number of unique symbols
  */
 int unique_chars_from_table(const int *table) {
@@ -363,7 +363,7 @@ int unique_chars_from_table(const int *table) {
 
 /**
  * Updates characters in ASCII table
- * @param table ASCII characters tbale
+ * @param table ASCII characters table
  * @param str string with characters
  */
 void update_chars_table(int *table, const char *str) {
