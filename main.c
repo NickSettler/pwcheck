@@ -7,6 +7,10 @@ typedef unsigned short bool;
 #define true 1
 #define false 0
 
+/**
+ * ASCII codes of symbols' categories:
+ * non-printing symbols, lower letters, upper letters, numbers, special symbols
+ */
 #define MIN_SYSTEM_SYMBOL_CODE 0
 #define MAX_SYSTEM_SYMBOL_CODE 31
 #define MIN_LOWER_LETTER_CODE 97
@@ -18,47 +22,96 @@ typedef unsigned short bool;
 #define MIN_SPEC_SYMBOL_CODE 32
 #define MAX_SPEC_SYMBOL_CODE 126
 
+/**
+ * Type of a function for checking character category
+ */
 typedef bool(*func_ptr)(char);
 
+/**
+ * Type of a function for checking four rules
+ */
 typedef bool(*rule_func_ptr)(char *, int);
 
+/**
+ * Statistics object type
+ */
 typedef struct {
     int n_chars;
     int min;
     double avg;
 } stats;
 
+/**
+ * Get character ASCII code
+ * @param c character
+ * @return ASCII code
+ */
 int char_code(char c) {
     return (int) c;
 }
 
+/**
+ * Checks if character is non-printing symbol
+ * @param c character to check
+ * @return if character is non-printing symbol
+ */
 bool is_system_symbol(char c) {
     return char_code(c) >= MIN_SYSTEM_SYMBOL_CODE && char_code(c) <= MAX_SYSTEM_SYMBOL_CODE;
 }
 
+/**
+ * Checks if character is lower letter
+ * @param c character to check
+ * @return if character is lower letter
+ */
 bool is_lower_letter(char c) {
     return char_code(c) >= MIN_LOWER_LETTER_CODE && char_code(c) <= MAX_LOWER_LETTER_CODE;
 }
 
+/**
+ * Checks if character is upper letter
+ * @param c character to check
+ * @return if character is upper letter
+ */
 bool is_upper_letter(char c) {
     return char_code(c) >= MIN_UPPER_LETTER_CODE && char_code(c) <= MAX_UPPER_LETTER_CODE;
 }
 
+/**
+ * Checks if character is number
+ * @param c character to check
+ * @return if character is number
+ */
 bool is_number(char c) {
     return char_code(c) >= MIN_NUMBER_CODE && char_code(c) <= MAX_NUMBER_CODE;
 }
 
+/**
+ * Checks if character is special symbol
+ * @param c character to check
+ * @return if character is special symbol
+ */
 bool is_specific_symbol(char c) {
     return char_code(c) >= MIN_SPEC_SYMBOL_CODE && char_code(c) <= MAX_SPEC_SYMBOL_CODE && !is_lower_letter(c) &&
            !is_upper_letter(c) && !is_number(c);
 }
 
+/**
+ * Returns length of a string including non-printing characters
+ * @param str string
+ * @return length of a string `str`
+ */
 size_t str_length(char *str) {
     const char *s;
     for (s = str; *s; ++s);
     return (s - str);
 }
 
+/**
+ * Returns length of a string excluding non-printing characters
+ * @param str string
+ * @return length of a string `str` without non-printing characters
+ */
 size_t str_length_only_chars(char *str) {
     int size = 0;
     for (int i = 0; str[i]; i++)
@@ -68,7 +121,14 @@ size_t str_length_only_chars(char *str) {
     return size;
 }
 
-void *substring(const char *str, char *substring, int start, int length) {
+/**
+ * Returns a substring of a string
+ * @param str initial string
+ * @param substring pointer to the string variable where substring will be placed
+ * @param start starting position of a substring
+ * @param length length of a substring
+ */
+void substring(const char *str, char *substring, int start, int length) {
     int c = 0;
     while (c < length) {
         substring[c] = str[start + c];
@@ -77,10 +137,28 @@ void *substring(const char *str, char *substring, int start, int length) {
     substring[c] = '\0';
 }
 
+/**
+ * Counts the numbers of substrings with size `kernel_size` in the string `str`
+ * Example:
+ *  str: 'ABCDEF'
+ *  kernel_size: 3
+ *
+ *  The `str_substrings_count` will return 4, because there are such possible
+ *  substrings in the `str`: {"ABC", "BCD", "CDE", "DEF"}
+ * @param str string to find number of substrings
+ * @param kernel_size size of a substring
+ * @return number of possible substrings
+ */
 int str_substrings_count(char *str, int kernel_size) {
     return (int) str_length_only_chars(str) - kernel_size + 1;
 }
 
+/**
+ * Compares two string
+ * @param a first string
+ * @param b second string
+ * @return if strings are equal
+ */
 bool is_equal(const char *a, const char *b) {
     bool is_equal = true;
     int i = 0;
@@ -97,6 +175,13 @@ bool is_equal(const char *a, const char *b) {
     return is_equal;
 }
 
+/**
+ * Checks if the first rule succeeds for the string.
+ * First Rule: The string has at least one lower and one upper letter
+ * @param str string to check
+ * @param level level of checking for the rule
+ * @return if the string succeeds the first rule
+ */
 bool first_rule_check(char *str, int level) {
     bool has_lower_letter = false;
     bool has_upper_letter = false;
@@ -109,6 +194,17 @@ bool first_rule_check(char *str, int level) {
     return has_lower_letter && has_upper_letter;
 }
 
+/**
+ * Checks if the second rule succeeds for the string.
+ * Second Rule: The string completes condition depending on the level parameter.
+ *  1. The string includes lower letters
+ *  2. The string includes upper letters
+ *  3. The string includes numbers
+ *  4. The string includes special characters
+ * @param str string to check
+ * @param level level of checking for the rule
+ * @return if the string succeeds the second rule
+ */
 bool second_rule_check(char *str, int level) {
     bool first_rule_succeeded = first_rule_check(str, level);
 
@@ -143,6 +239,14 @@ bool second_rule_check(char *str, int level) {
     return !has_wrong_rules;
 }
 
+/**
+ * Checks if the third rule succeeds for the string.
+ * Third Rule: The string does not have a substring of the same characters with
+ * at least X length
+ * @param str string to check
+ * @param level level of checking for the rule
+ * @return if the string succeeds the third rule
+ */
 bool third_rule_check(char *str, int level) {
     bool first_rule_succeeded = first_rule_check(str, level);
     bool second_rule_succeeded = second_rule_check(str, level);
@@ -173,6 +277,13 @@ bool third_rule_check(char *str, int level) {
     return !has_repeats;
 }
 
+/**
+ * Checks if the fourth rule succeeds for the string.
+ * Fourth Rule: The string does not have two same substrings with at least X length
+ * @param str string to check
+ * @param level level of checking for the rule
+ * @return if the string succeeds the fourth rule
+ */
 bool fourth_rule_check(char *str, int level) {
     bool first_rule_succeeded = first_rule_check(str, level);
     bool second_rule_succeeded = second_rule_check(str, level);
@@ -212,6 +323,11 @@ bool fourth_rule_check(char *str, int level) {
     return !has_multiple_repeats;
 }
 
+/**
+ * Counts number of symbols valued as 1 from ASCII table
+ * @param table ASCII characters tbale
+ * @return number of unique symbols
+ */
 int unique_chars_from_table(const int *table) {
     int c = 0;
     for (int i = 0; i < 128; i++)
@@ -221,10 +337,19 @@ int unique_chars_from_table(const int *table) {
     return c;
 }
 
+/**
+ * Updates characters in ASCII table
+ * @param table ASCII characters tbale
+ * @param str string with characters
+ */
 void update_chars_table(int *table, const char *str) {
     for (int i = 0; str[i]; i++) table[str[i]] = 1;
 }
 
+/**
+ * Print statistics to stdout
+ * @param statistics statistics object to print
+ */
 void print_stats(stats statistics) {
     printf(
             "Statistika:\n"
@@ -233,6 +358,12 @@ void print_stats(stats statistics) {
             "Prumerna delka: %.1f", statistics.n_chars, statistics.min, statistics.avg);
 }
 
+/**
+ * Main program function
+ * @param argc number of the arguments
+ * @param argv arguments' array
+ * @return exit code
+ */
 int main(int argc, char *argv[]) {
     int level = 0;
     int param = 0;
