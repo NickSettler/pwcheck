@@ -31,23 +31,24 @@ int char_code(char c) {
 }
 
 bool is_system_symbol(char c) {
-    return char_code(c) > MIN_SYSTEM_SYMBOL_CODE && char_code(c) < MAX_SYSTEM_SYMBOL_CODE;
+    return char_code(c) >= MIN_SYSTEM_SYMBOL_CODE && char_code(c) <= MAX_SYSTEM_SYMBOL_CODE;
 }
 
 bool is_lower_letter(char c) {
-    return char_code(c) > MIN_LOWER_LETTER_CODE && char_code(c) < MAX_LOWER_LETTER_CODE;
+    return char_code(c) >= MIN_LOWER_LETTER_CODE && char_code(c) <= MAX_LOWER_LETTER_CODE;
 }
 
 bool is_upper_letter(char c) {
-    return char_code(c) > MIN_UPPER_LETTER_CODE && char_code(c) < MAX_UPPER_LETTER_CODE;
+    return char_code(c) >= MIN_UPPER_LETTER_CODE && char_code(c) <= MAX_UPPER_LETTER_CODE;
 }
 
 bool is_number(char c) {
-    return char_code(c) > MIN_NUMBER_CODE && char_code(c) < MAX_NUMBER_CODE;
+    return char_code(c) >= MIN_NUMBER_CODE && char_code(c) <= MAX_NUMBER_CODE;
 }
 
 bool is_specific_symbol(char c) {
-    return char_code(c) > MIN_SPEC_SYMBOL_CODE && char_code(c) < MAX_SPEC_SYMBOL_CODE;
+    return char_code(c) >= MIN_SPEC_SYMBOL_CODE && char_code(c) <= MAX_SPEC_SYMBOL_CODE && !is_lower_letter(c) &&
+           !is_upper_letter(c) && !is_number(c);
 }
 
 size_t str_length(char *str) {
