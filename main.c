@@ -248,10 +248,10 @@ int main(int argc, char *argv[]) {
                 need_stats = true;
                 break;
             case 'f':
-                level = ((int) *optarg) - MIN_NUMBER_CODE;
+                level = atoi(optarg);
                 break;
             case 'l':
-                param = ((int) *optarg) - MIN_NUMBER_CODE;
+                param = atoi(optarg);
                 break;
             default:
                 abort();
@@ -288,14 +288,14 @@ int main(int argc, char *argv[]) {
         passwords_count += 1;
         passwords_chars_count += (int) str_length_only_chars(input_passwords);
 
-        if (feof(stdin)) {
+        if (feof(stdin) && need_stats) {
             double avg = passwords_chars_count / passwords_count;
 
             stats statistics;
             statistics.n_chars = unique_chars_from_table(chars_table);
             statistics.min = min;
             statistics.avg = avg;
-//            print_stats(statistics);
+            print_stats(statistics);
         }
 
 
