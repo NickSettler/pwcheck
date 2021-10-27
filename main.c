@@ -1,7 +1,7 @@
 #include <stdio.h>
+#include <limits.h>
 #include <getopt.h>
 #include <stdlib.h>
-#include <math.h>
 
 typedef unsigned short bool;
 #define true 1
