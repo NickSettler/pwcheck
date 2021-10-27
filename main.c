@@ -66,7 +66,7 @@ size_t str_length_only_chars(char *str) {
     return size;
 }
 
-char *substring(const char *str, char *substring, int start, int length) {
+void *substring(const char *str, char *substring, int start, int length) {
     int c = 0;
     while (c < length) {
         substring[c] = str[start + c];
@@ -220,13 +220,13 @@ int main(int argc, char *argv[]) {
     char input_passwords[100];
 
     int chars_table[128] = {0};
-    int min = INFINITY;
+    int min = INT_MAX;
     double passwords_count = 0;
     double passwords_chars_count = 0;
 
     while (fgets(input_passwords, 100, stdin)) {
 //        WORKS!
-//        if (fourth_rule_check(input_passwords, 1))
+//        if (fourth_rule_check(input_passwords, 2))
 //            printf("%s - %s\n", input_passwords, "fourth rule success");
 //        else
 //            printf("%s - %s\n", input_passwords, "fourth rule error");
@@ -257,16 +257,8 @@ int main(int argc, char *argv[]) {
 
 
 //        WORKS!
-//        if (second_rule_check(input_passwords, 1))
-//            printf("%s - %s\n", input_passwords, "second rule success");
-//        else
-//            printf("%s - %s\n", input_passwords, "second rule error");
 
 //        WORKS!
-//        if (first_rule_check(input_passwords))
-//            printf("%s - %s\n", input_passwords, "first rule success");
-//        else
-//            printf("%s - %s\n", input_passwords, "first rule error");
     }
 
 //    int opt;
