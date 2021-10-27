@@ -79,20 +79,6 @@ int str_substrings_count(char *str, int kernel_size) {
     return (int) str_length_only_chars(str) - kernel_size + 1;
 }
 
-char *str_copy(char *dest, const char *src) {
-    char *ptr = dest;
-
-    while (*src != '\0') {
-        *dest = *src;
-        dest++;
-        src++;
-    }
-
-    *dest = '\0';
-
-    return ptr;
-}
-
 bool is_equal(const char *a, const char *b) {
     bool is_equal = true;
     int i = 0;
@@ -108,41 +94,6 @@ bool is_equal(const char *a, const char *b) {
 
     return is_equal;
 }
-
-bool str_no_diff(char *str) {
-    for (int i = 0; i < str_length(str); i++)
-        if (str[i] != str[0])
-            return false;
-
-    return true;
-}
-
-bool has_system_symbols(char *str) {
-    bool has_symbols = false;
-
-    for (char *c = str; *c; ++c) {
-        if (is_system_symbol(*c)) {
-            has_symbols = true;
-            break;
-        }
-
-    }
-
-    return has_symbols;
-}
-
-//int unique_chars(const char *str) {
-//    int table[128] = {0};
-//    int c = 0;
-//
-//    for (int i = 0; str[i]; i++) table[str[i]] = 1;
-//
-//    for (int i = 0; i < 128; i++)
-//        if (!(i > MIN_SYSTEM_SYMBOL_CODE && i < MAX_SYSTEM_SYMBOL_CODE))
-//            c += table[i];
-//
-//    return c;
-//}
 
 bool first_rule_check(char *str) {
     bool has_lower_letter = false;
