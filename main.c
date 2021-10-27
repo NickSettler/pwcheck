@@ -163,6 +163,19 @@ int str_substrings_count(char *str, int kernel_size) {
 }
 
 /**
+ * Checks if all characters in the string are same
+ * @param str string to check
+ * @return if all characters in the string are same
+ */
+bool str_no_diff(char *str) {
+    for (int i = 0; i < str_length(str); i++)
+        if (str[i] != str[0])
+            return false;
+
+    return true;
+}
+
+/**
  * Compares two string
  * @param a first string
  * @param b second string
