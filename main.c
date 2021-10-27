@@ -210,31 +210,36 @@ bool third_rule_check(char *str, int level) {
 }
 
 bool fourth_rule_check(char *str, int level) {
-//    int repeats_count = 0;
-//    char *first_repeat_kernel = "";
-//
-//    for (int i = 0; i < str_length(str); i++) {
-//        char c = str[i];
-//        if (char_code(c) > MIN_SYSTEM_SYMBOL_CODE && char_code(c) < MAX_SYSTEM_SYMBOL_CODE) continue;
-//
-//        char kernel[level];
-//        substring(str, kernel, i, level);
-//
-//        if (has_system_symbols(kernel)) continue;
-//        if (i + level > str_length_only_chars(str)) continue;
-//
-//        if (str_no_diff(kernel)) {
-//            repeats_count += 1;
-//            if (is_equal(first_repeat_kernel, "")) {
-//                printf("firstly setting kernel\n");
-//                char temp_repeat_kernel[level];
-//
-//                first_repeat_kernel = temp_repeat_kernel;
-//            }
-//
-//            printf("FPK: %s\n", first_repeat_kernel);
-//        }
-//    }
+    int first_repeat_index_a = -1;
+    int first_repeat_index_b = -1;
+
+    bool has_multiple_repeats = false;
+
+    int substrings_count = str_substrings_count(str, level);
+
+    for (int i = 0; i < substrings_count; i++) {
+        for (int j = 0; j < substrings_count; j++) {
+            if (i < j) {
+                char substring_a[level], substring_b[level];
+                substring(str, substring_a, i, level);
+                substring(str, substring_b, j, level);
+
+                if (is_equal(substring_a, substring_b)) {
+                    if (first_repeat_index_a == -1 && first_repeat_index_b == -1) {
+                        first_repeat_index_a = i;
+                        first_repeat_index_b = j;
+                    } else {
+                        has_multiple_repeats = true;
+                        break;
+                    }
+                }
+            }
+        }
+
+        if (has_multiple_repeats) break;
+    }
+
+    return !has_multiple_repeats;
 }
 
 int unique_chars_from_table(const int *table) {
@@ -268,6 +273,11 @@ int main(int argc, char *argv[]) {
     double passwords_chars_count = 0;
 
     while (fgets(input_passwords, 100, stdin)) {
+//        WORKS!
+//        if (fourth_rule_check(input_passwords, 1))
+//            printf("%s - %s\n", input_passwords, "fourth rule success");
+//        else
+//            printf("%s - %s\n", input_passwords, "fourth rule error");
 
 //        WORKS!
 //        if (third_rule_check(input_passwords, 2))
