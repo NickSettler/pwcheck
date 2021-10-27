@@ -217,6 +217,34 @@ void print_stats(stats statistics) {
 }
 
 int main(int argc, char *argv[]) {
+    int level = 0;
+    int param = 0;
+    bool need_stats = false;
+
+    int opt;
+    int option_index = 0;
+    struct option long_options[] = {
+            {"stats", no_argument, 0, 0}
+    };
+
+    while ((opt = getopt_long(argc, argv, "f:l:", long_options, &option_index)) != -1) {
+        switch (opt) {
+            case 0:
+                need_stats = true;
+                break;
+            case 'f':
+                level = ((int) *optarg) - MIN_NUMBER_CODE;
+                break;
+            case 'l':
+                param = ((int) *optarg) - MIN_NUMBER_CODE;
+                break;
+            default:
+                abort();
+        }
+    }
+
+//    printf("Current level: %d\nCurrent extra param: %d\nStatistics needed: %s", level, param, need_stats ? "true" : "false");
+
     char input_passwords[100];
 
     int chars_table[128] = {0};
@@ -260,19 +288,6 @@ int main(int argc, char *argv[]) {
 
 //        WORKS!
     }
-
-//    int opt;
-
-//    while ((opt = getopt(argc, argv, "lf")) != -1) {
-//        switch (opt) {
-//            case 'f':
-//                printf("Option f was specified\n");
-//                break;
-//            case 'l':
-//                printf("Option l was specified\n");
-//                break;
-//        }
-//    }
 
     return 0;
 }
