@@ -95,7 +95,7 @@ bool is_equal(const char *a, const char *b) {
     return is_equal;
 }
 
-bool first_rule_check(char *str) {
+bool first_rule_check(char *str, int level) {
     bool has_lower_letter = false;
     bool has_upper_letter = false;
 
@@ -108,6 +108,10 @@ bool first_rule_check(char *str) {
 }
 
 bool second_rule_check(char *str, int level) {
+    bool first_rule_succeeded = first_rule_check(str, level);
+
+    if (!first_rule_succeeded) return false;
+
     if (level > 4) level = 4;
     bool conditions[level];
     func_ptr rule_functions[4] = {is_lower_letter, is_upper_letter, is_number, is_specific_symbol};
@@ -138,6 +142,11 @@ bool second_rule_check(char *str, int level) {
 }
 
 bool third_rule_check(char *str, int level) {
+    bool first_rule_succeeded = first_rule_check(str, level);
+    bool second_rule_succeeded = second_rule_check(str, level);
+
+    if (!first_rule_succeeded || !second_rule_succeeded) return false;
+
     bool has_repeats = false;
 
     int substrings_count = str_substrings_count(str, level);
@@ -163,6 +172,12 @@ bool third_rule_check(char *str, int level) {
 }
 
 bool fourth_rule_check(char *str, int level) {
+    bool first_rule_succeeded = first_rule_check(str, level);
+    bool second_rule_succeeded = second_rule_check(str, level);
+    bool third_rule_succeeded = third_rule_check(str, level);
+
+    if (!first_rule_succeeded || !second_rule_succeeded || !third_rule_succeeded) return false;
+
     int first_repeat_index_a = -1;
     int first_repeat_index_b = -1;
 
