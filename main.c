@@ -319,31 +319,26 @@ bool fourth_rule_check(char *str, int level) {
         !third_rule_succeeded)
         return false;
 
-    int first_repeat_index_a = -1;
-    int first_repeat_index_b = -1;
-
     bool has_multiple_repeats = false;
 
-    int substrings_count = str_substrings_count(str, level);
+    for (int i = level; i < str_length_only_chars(str); i++) {
+        int substrings_count = str_substrings_count(str, i);
 
-    for (int i = 0; i < substrings_count; i++) {
         for (int j = 0; j < substrings_count; j++) {
-            if (i < j) {
-                char substring_a[level], substring_b[level];
-                substring(str, substring_a, i, level);
-                substring(str, substring_b, j, level);
-
-                if (is_equal(substring_a, substring_b)) {
-                    if (first_repeat_index_a == -1 &&
-                        first_repeat_index_b == -1) {
-                        first_repeat_index_a = i;
-                        first_repeat_index_b = j;
-                    } else {
+            char substring_a[i];
+            substring(str, substring_a, j, i);
+            for (int k = 0; k < substrings_count; k++) {
+                char substring_b[i];
+                substring(str, substring_b, k, i);
+                if (j < k) {
+                    if (is_equal(substring_a, substring_b)) {
                         has_multiple_repeats = true;
                         break;
                     }
                 }
             }
+
+            if (has_multiple_repeats) break;
         }
 
         if (has_multiple_repeats) break;
