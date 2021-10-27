@@ -23,7 +23,7 @@ typedef bool(*func_ptr)(char);
 typedef struct {
     int n_chars;
     int min;
-    int avg;
+    double avg;
 } stats;
 
 int char_code(char c) {
@@ -257,13 +257,12 @@ void update_chars_table(int *table, const char *str) {
     for (int i = 0; str[i]; i++) table[str[i]] = 1;
 }
 
-stats calc_stats(char *passwords) {
-    stats resulting_stats;
-    resulting_stats.n_chars = 0;
-    resulting_stats.min = 0;
-    resulting_stats.avg = 0;
-
-    return resulting_stats;
+void print_stats(stats statistics) {
+    printf(
+            "Statistika:\n"
+            "Ruznych znaku: %d\n"
+            "Minimalni delka: %d\n"
+            "Prumerna delka: %.1f", statistics.n_chars, statistics.min, statistics.avg);
 }
 
 int main(int argc, char *argv[]) {
@@ -287,26 +286,23 @@ int main(int argc, char *argv[]) {
 //        else
 //            printf("%s - %s\n", input_passwords, "third rule error");
 
-//        WORKS!
-//        update_chars_table(chars_table, input_passwords);
-//
-//        printf("\n\n");
-//
-//        int password_length = (int) str_length_only_chars(input_passwords);
-//
-//        if (password_length < min) min = password_length;
-//
-//        passwords_count += 1;
-//        passwords_chars_count += (int) str_length_only_chars(input_passwords);
-//
-//        if (feof(stdin)) {
-//            printf("feof\n\n");
-//            double avg = passwords_chars_count / passwords_count;
-//
-//            printf("NCHARS: %d\n", unique_chars_from_table(chars_table));
-//            printf("MIN: %d\n", min);
-//            printf("AVG: %.1f", avg);
-//        }
+        update_chars_table(chars_table, input_passwords);
+
+        int password_length = (int) str_length_only_chars(input_passwords);
+        if (password_length < min) min = password_length;
+
+        passwords_count += 1;
+        passwords_chars_count += (int) str_length_only_chars(input_passwords);
+
+        if (feof(stdin)) {
+            double avg = passwords_chars_count / passwords_count;
+
+            stats statistics;
+            statistics.n_chars = unique_chars_from_table(chars_table);
+            statistics.min = min;
+            statistics.avg = avg;
+//            print_stats(statistics);
+        }
 
 
 //        WORKS!
