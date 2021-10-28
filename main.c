@@ -197,6 +197,32 @@ bool is_equal(const char *a, const char *b) {
     return is_equal;
 }
 
+int array_length(char *array[]) {
+    int count = 0;
+
+    while (*(array + count) != NULL)
+        count++;
+
+    return count;
+}
+
+bool array_contains_string(char *array[], char *str) {
+    bool contains = false;
+
+    if (!array[0]) return contains;
+
+    int size = array_length(array);
+
+    for (int i = 0; i < size; i++) {
+        if (is_equal(array[i], str)) {
+            contains = true;
+            break;
+        }
+    }
+
+    return contains;
+}
+
 /**
  * Checks if the first rule succeeds for the string.
  * First Rule: The string has at least one lower and one upper letter
