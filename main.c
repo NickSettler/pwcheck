@@ -197,6 +197,11 @@ bool is_equal(const char *a, const char *b) {
     return is_equal;
 }
 
+/**
+ * Returns array items count
+ * @param array array to count
+ * @return length of the array
+ */
 int array_length(char *array[]) {
     int count = 0;
 
@@ -206,6 +211,12 @@ int array_length(char *array[]) {
     return count;
 }
 
+/**
+ * Finds out if the array contains a string
+ * @param array array to look for the string
+ * @param str string searching for
+ * @return if the string is in the array
+ */
 bool array_contains_string(char *array[], char *str) {
     bool contains = false;
 
