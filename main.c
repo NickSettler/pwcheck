@@ -527,7 +527,6 @@ int main(int argc, char *argv[]) {
         if (check_functions[level - 1](input_passwords, param))
             printf("%s", input_passwords);
 
-
         update_chars_table(chars_table, input_passwords);
 
         int password_length = (int) str_length_only_chars(input_passwords);
