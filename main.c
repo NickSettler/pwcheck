@@ -7,6 +7,10 @@ typedef unsigned short bool;
 #define true 1
 #define false 0
 
+#define SECURITY_KEY "-l"
+#define EXTRA_PARAM_KEY "-p"
+#define STATS_KEY "--stats"
+
 /**
  * ASCII codes of symbols' categories:
  * non-printing symbols, lower letters, upper letters, numbers, special symbols
@@ -385,6 +389,76 @@ bool fourth_rule_check(char *str, int level) {
 }
 
 /**
+ * Returns a program argument
+ * @param argv array of program arguments
+ * @param argument argument name
+ * @param default_position default argument position (if argument name not exists)
+ * @param default_value default value
+ * @return option value as a number
+ */
+int get_program_argument(
+        char *argv[],
+        char *argument,
+        int default_position,
+        int default_value) {
+    int arg = 1;
+
+    int size = array_length(argv);
+
+    if (array_contains_string(argv, argument))
+        for (int i = 0; i < size; i++) {
+            if (is_equal(argv[i], argument)) {
+                arg = argv[i + 1] ? atoi(argv[i + 1]) : default_value;
+                break;
+            }
+        }
+    else
+        arg = argv[default_position] ?
+              atoi(argv[default_position]) :
+              default_value;
+
+    return arg;
+}
+
+/**
+ * Returns a security param
+ * @param argv array of program arguments
+ * @return security level integer
+ */
+int get_security_level(char *argv[]) {
+    int default_position = array_contains_string(argv, SECURITY_KEY) ? 2 : 1;
+
+    return get_program_argument(argv, SECURITY_KEY, default_position, 1);
+}
+
+/**
+ * Returns an extra param
+ * @param argv array of program arguments
+ * @return extra param integer
+ */
+int get_extra_param(char *argv[]) {
+    bool has_security_option_key = array_contains_string(argv, SECURITY_KEY);
+    bool has_extra_param_key = array_contains_string(argv, EXTRA_PARAM_KEY);
+
+    int default_position = array_contains_string(argv, EXTRA_PARAM_KEY) ? 3 : 2;
+    if (has_security_option_key)
+        default_position += 1;
+    else if (has_extra_param_key)
+        default_position -= 1;
+
+    return get_program_argument(argv, EXTRA_PARAM_KEY, default_position, 1);
+}
+
+/**
+ * Returns true if statistics needed
+ * @param argv array of program arguments
+ * @return if statistics needed
+ */
+bool is_stats_needed(char *argv[]) {
+    return array_contains_string(argv, STATS_KEY);
+}
+
+/**
  * Counts number of symbols valued as 1 from ASCII table
  * @param table ASCII characters table
  * @return number of unique symbols
@@ -431,37 +505,9 @@ void print_stats(stats statistics) {
  * @return exit code
  */
 int main(int argc, char *argv[]) {
-    int level = 0;
-    int param = 0;
-    bool need_stats = false;
-
-    int opt;
-    int option_index = 0;
-    struct option long_options[] = {
-            {"stats", no_argument, 0, 0}
-    };
-
-    while ((opt = getopt_long(
-            argc,
-            argv,
-            "f:l:",
-            long_options,
-            &option_index)
-           ) != -1) {
-        switch (opt) {
-            case 0:
-                need_stats = true;
-                break;
-            case 'f':
-                level = atoi(optarg);
-                break;
-            case 'l':
-                param = atoi(optarg);
-                break;
-            default:
-                abort();
-        }
-    }
+    int level = get_security_level(argv);
+    int param = get_extra_param(argv);
+    bool need_stats = is_stats_needed(argv);
 
     char input_passwords[100];
 
@@ -477,7 +523,7 @@ int main(int argc, char *argv[]) {
             &fourth_rule_check
     };
 
-    printf("L: %d, P: %d, NS: %d", level, param, need_stats);
+    printf("SEC_LVL: %d, PARAM: %d, STATS: %d\n", level, param, need_stats);
 
     while (fgets(input_passwords, 100, stdin)) {
         if (check_functions[level - 1](input_passwords, param))
