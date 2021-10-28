@@ -430,11 +430,13 @@ int main(int argc, char *argv[]) {
             {"stats", no_argument, 0, 0}
     };
 
-    while ((opt = getopt_long(argc,
-                              argv,
-                              "f:l:",
-                              long_options,
-                              &option_index)) != -1) {
+    while ((opt = getopt_long(
+            argc,
+            argv,
+            "f:l:",
+            long_options,
+            &option_index)
+           ) != -1) {
         switch (opt) {
             case 0:
                 need_stats = true;
@@ -463,6 +465,8 @@ int main(int argc, char *argv[]) {
             &third_rule_check,
             &fourth_rule_check
     };
+
+    printf("L: %d, P: %d, NS: %d", level, param, need_stats);
 
     while (fgets(input_passwords, 100, stdin)) {
         if (check_functions[level - 1](input_passwords, param))
