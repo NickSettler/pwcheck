@@ -3,4 +3,4 @@ project(pwcheck C)
 
 set(CMAKE_C_STANDARD 99)
 
-add_executable(pwcheck main.c)
+add_executable(pwcheck pwcheck.c)
