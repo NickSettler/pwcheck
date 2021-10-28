@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <limits.h>
-#include <getopt.h>
 #include <stdlib.h>
 
 typedef unsigned short bool;
@@ -276,7 +275,7 @@ bool second_rule_check(char *str, int level) {
     if (level > 4) level = 4;
 
     bool conditions[level];
-    func_ptr rule_functions[4] = {
+    const func_ptr rule_functions[4] = {
             is_lower_letter,
             is_upper_letter,
             is_number,
