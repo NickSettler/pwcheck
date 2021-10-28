@@ -523,8 +523,6 @@ int main(int argc, char *argv[]) {
             &fourth_rule_check
     };
 
-    printf("SEC_LVL: %d, PARAM: %d, STATS: %d\n", level, param, need_stats);
-
     while (fgets(input_passwords, 100, stdin)) {
         if (check_functions[level - 1](input_passwords, param))
             printf("%s", input_passwords);
